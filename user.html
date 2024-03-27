@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title> Raman Page</title>
+       
+    </head>
+    <body>
+         <!--<h1 id="bodyheader">Welocome to the HTML world <spam id="username"></spam></h1>
+        <button onclick="userclick(`Ram`)" > Ram</button>
+        <button onclick="userclick(`Sita`)" > Sita</button> */
+        <script>
+
+            const userclick = (name) => { 
+                name === "Ram" ? document.getElementById("bodyheader").style.backgroundColor="red" : document.getElementById("bodyheader").style.backgroundColor="blue"
+                document.getElementById("username").innerHTML = name;
+            }
+
+        </script> -->
+
+<br/><br/>
+<div align="center">
+    <input type="text" id="txtUser" onkeyup="handlesearch()" />
+    <button id="btnAdd" onclick="AddUser()"   >Add User</button>
+    <button id="btnEdit" onclick="updateuser()" hidden="hidden" >Update User</button>
+    <ul id="userlist">
+    </ul>
+<button onclick="formsubmit()" > Submit </button>
+</div>
+
+<script>
+let users = [];
+let selecteduser = -1;
+
+const formsubmit = () =>{
+    alert('Current user List: ' + users);
+}
+
+const AddUser = () =>{
+    let objUser =document.getElementById("txtUser").value.trim();
+    users = (objUser === "" || users.findIndex(item => objUser.toLowerCase() === item.toLowerCase()) !== -1)?[...users] : [...users, objUser.trim()];
+    refreshuserlist();
+    document.getElementById("txtUser").value ="";
+}
+
+const handlesearch = () => {
+    let objUser =document.getElementById("txtUser").value.trim().toLowerCase();
+    document.getElementById("userlist").innerHTML = users.filter(key => key.toLowerCase().includes(objUser)).map((user, index) => `<li>` + user + `   <button onclick="clickedit(${users.findIndex(item => user.toLowerCase() === item.toLowerCase())})" >Edit</button><button onclick="clickDelete(${users.findIndex(item => user.toLowerCase() === item.toLowerCase())})">Delete</button> </li>`).join(` `);    
+}
+
+const clickDelete = (index) =>{
+    let r = users.splice(index,1);
+    document.getElementById("btnEdit").hidden ="hidden";
+    document.getElementById("btnEdit").innerHTML = ``;
+    refreshuserlist();
+    document.getElementById("txtUser").value ="";
+}
+
+const clickedit = (index) => {
+    selecteduser = index;
+    document.getElementById("txtUser").value = users[index];
+    refreshuserlist();
+    document.getElementById("btnEdit").hidden ="";
+    document.getElementById("btnEdit").innerHTML = `Update user: ${users[index]}`;
+}
+
+const refreshuserlist = () =>{
+    document.getElementById("userlist").innerHTML = users.map((user, index) => `<li>` + user + `   <button  onclick="clickedit(${index})" >Edit</button><button onclick="clickDelete(${index})">Delete</button> </li>`).join(` `);    
+}
+
+const updateuser = () =>{
+    users[selecteduser] = document.getElementById("txtUser").value;
+    document.getElementById("btnEdit").hidden ="hidden";
+    document.getElementById("btnEdit").innerHTML = ``;
+    refreshuserlist();
+    document.getElementById("txtUser").value ="";
+}
+
+
+</script>
+
+
+    </body>
+</html>
